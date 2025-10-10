@@ -1,9 +1,43 @@
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { PrismaClient } from '@prisma/client'
+// import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
-const prisma = new PrismaClient()
+// const prisma = new PrismaClient()
+
+// Mock user data for development
+const mockUsers = [
+  {
+    id: '1',
+    email: 'owner@test.com',
+    password: '$2a$10$mockhashedpassword',
+    name: 'Test Owner',
+    role: 'owner',
+    is_paid: true,
+    is_kyc_verified: true,
+    is_mfa_setup: true
+  },
+  {
+    id: '2',
+    email: 'executor@test.com',
+    password: '$2a$10$mockhashedpassword',
+    name: 'Test Executor',
+    role: 'executor',
+    is_paid: false,
+    is_kyc_verified: false,
+    is_mfa_setup: false
+  },
+  {
+    id: '3',
+    email: 'admin@test.com',
+    password: '$2a$10$mockhashedpassword',
+    name: 'Test Admin',
+    role: 'admin',
+    is_paid: true,
+    is_kyc_verified: true,
+    is_mfa_setup: true
+  }
+]
 
 const handler = NextAuth({
   providers: [
@@ -18,28 +52,27 @@ const handler = NextAuth({
           return null
         }
 
-        const user = await prisma.user.findUnique({
-          where: {
-            email: credentials.email
-          }
-        })
+        // For development - use mock users
+        const user = mockUsers.find(u => u.email === credentials.email)
 
         if (!user) {
           return null
         }
 
-        const isPasswordValid = await bcrypt.compare(
-          credentials.password,
-          user.password
-        )
+        // For development - accept any password, in production this would use bcrypt
+        // const isPasswordValid = await bcrypt.compare(
+        //   credentials.password,
+        //   user.password
+        // )
 
-        if (!isPasswordValid) {
-          return null
-        }
+        // if (!isPasswordValid) {
+        //   return null
+        // }
 
         return {
           id: user.id,
           email: user.email,
+          name: user.name,
           role: user.role,
           is_paid: user.is_paid,
           is_kyc_verified: user.is_kyc_verified,
@@ -74,7 +107,6 @@ const handler = NextAuth({
   },
   pages: {
     signIn: '/auth/signin',
-    signUp: '/auth/signup',
   },
 })
 

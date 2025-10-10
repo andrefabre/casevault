@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
+// import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
-const prisma = new PrismaClient()
+// const prisma = new PrismaClient()
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password } = await request.json()
+    const { email, password, name } = await request.json()
 
     // Validate input
     if (!email || !password) {
@@ -16,32 +16,35 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Check if user already exists
-    const existingUser = await prisma.user.findUnique({
-      where: { email }
-    })
+    // Check if user already exists (mock implementation)
+    // const existingUser = await prisma.user.findUnique({
+    //   where: { email }
+    // })
 
-    if (existingUser) {
-      return NextResponse.json(
-        { message: 'User already exists with this email' },
-        { status: 400 }
-      )
-    }
+    // For development - always allow signup
+    // if (existingUser) {
+    //   return NextResponse.json(
+    //     { message: 'User already exists with this email' },
+    //     { status: 400 }
+    //   )
+    // }
 
-    // Hash password
+    // Hash password (mock implementation)
     const hashedPassword = await bcrypt.hash(password, 12)
 
-    // Create user with default role 'Owner'
-    const user = await prisma.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-        role: 'Owner', // Default role as specified
-        is_paid: false,
-        is_kyc_verified: false,
-        is_mfa_setup: false,
-      }
-    })
+    // Mock user creation
+    const user = {
+      id: Math.random().toString(36).substr(2, 9),
+      email,
+      name,
+      password: hashedPassword,
+      role: 'owner',
+      is_paid: false,
+      is_kyc_verified: false,
+      is_mfa_setup: false,
+      created_at: new Date(),
+      updated_at: new Date()
+    }
 
     // Remove password from response
     const { password: _, ...userWithoutPassword } = user

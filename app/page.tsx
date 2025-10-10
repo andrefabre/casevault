@@ -13,9 +13,9 @@ export default async function HomePage() {
       case 'Owner':
         redirect('/owner-vault')
       case 'Executor':
-        redirect('/executor-vault')
+        redirect('/executor-access')
       case 'Admin':
-        redirect('/admin-vault')
+        redirect('/admin-panel')
       default:
         redirect('/auth/setup-mfa')
     }

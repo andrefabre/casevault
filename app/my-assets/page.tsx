@@ -68,8 +68,10 @@ export default function MyAssetsPage() {
             <nav className="hidden md:flex items-center space-x-6">
               <Link href="/owner-vault" className="text-gray-700 hover:text-gray-900">Dashboard</Link>
               <Link href="/my-executors" className="text-gray-700 hover:text-gray-900">My Executors</Link>
-              <Link href="#" className="text-blue-600 font-medium">My Assets</Link>
-              <Link href="#" className="text-gray-700 hover:text-gray-900">Settings</Link>
+              <Link href="/my-assets" className="text-blue-600 font-medium">My Assets</Link>
+              <Link href="/admin-panel" className="text-gray-700 hover:text-gray-900">Admin Panel</Link>
+              <Link href="/executor-access" className="text-gray-700 hover:text-gray-900">Executor Access</Link>
+              <Link href="/" className="text-gray-700 hover:text-gray-900">About</Link>
               <button className="text-gray-700 hover:text-gray-900">Log Out</button>
             </nav>
           </div>

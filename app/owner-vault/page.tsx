@@ -82,12 +82,12 @@ export default function OwnerVaultPage() {
             </div>
             
             <nav className="hidden md:flex items-center space-x-6">
-              <Link href="#" className="text-gray-700 hover:text-gray-900">Dashboard</Link>
-              <Link href="#" className="text-gray-700 hover:text-gray-900">Executor Portal</Link>
-              <Link href="#" className="text-gray-700 hover:text-gray-900">Digital Onboarding</Link>
-              <Link href="#" className="text-gray-700 hover:text-gray-900">Admin Panel</Link>
-              <Link href="#" className="text-gray-700 hover:text-gray-900">Executor Access</Link>
-              <Link href="#" className="text-gray-700 hover:text-gray-900">About</Link>
+              <Link href="/owner-vault" className="text-blue-600 font-medium">Dashboard</Link>
+              <Link href="/executor-portal" className="text-gray-700 hover:text-gray-900">Executor Portal</Link>
+              <Link href="/my-assets" className="text-gray-700 hover:text-gray-900">My Assets</Link>
+              <Link href="/admin-panel" className="text-gray-700 hover:text-gray-900">Admin Panel</Link>
+              <Link href="/executor-access" className="text-gray-700 hover:text-gray-900">Executor Access</Link>
+              <Link href="/" className="text-gray-700 hover:text-gray-900">About</Link>
               <button className="text-gray-700 hover:text-gray-900">Log Out</button>
             </nav>
           </div>

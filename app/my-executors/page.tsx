@@ -36,11 +36,11 @@ export default function MyExecutorsPage() {
             
             <nav className="hidden md:flex items-center space-x-6">
               <Link href="/owner-vault" className="text-gray-700 hover:text-gray-900">Dashboard</Link>
-              <Link href="#" className="text-gray-700 hover:text-gray-900">Executor Portal</Link>
-              <Link href="#" className="text-gray-700 hover:text-gray-900">Owner Onboarding</Link>
-              <Link href="#" className="text-gray-700 hover:text-gray-900">Admin Panel</Link>
-              <Link href="#" className="text-gray-700 hover:text-gray-900">Executor Access</Link>
-              <Link href="#" className="text-gray-700 hover:text-gray-900">About</Link>
+              <Link href="/executor-portal" className="text-gray-700 hover:text-gray-900">Executor Portal</Link>
+              <Link href="/my-executors" className="text-blue-600 font-medium">My Executors</Link>
+              <Link href="/admin-panel" className="text-gray-700 hover:text-gray-900">Admin Panel</Link>
+              <Link href="/executor-access" className="text-gray-700 hover:text-gray-900">Executor Access</Link>
+              <Link href="/" className="text-gray-700 hover:text-gray-900">About</Link>
               <button className="text-gray-700 hover:text-gray-900">Log Out</button>
             </nav>
           </div>

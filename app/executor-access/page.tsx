@@ -68,12 +68,12 @@ export default function ExecutorAccessPage() {
             </div>
             
             <nav className="hidden md:flex items-center space-x-6">
-              <Link href="#" className="text-gray-700 hover:text-gray-900">Dashboard</Link>
-              <Link href="#" className="text-gray-700 hover:text-gray-900">Executor Portal</Link>
-              <Link href="#" className="text-gray-700 hover:text-gray-900">Owner Onboarding</Link>
-              <Link href="#" className="text-gray-700 hover:text-gray-900">Admin Panel</Link>
-              <Link href="#" className="text-blue-600 font-medium">Executor Access</Link>
-              <Link href="#" className="text-gray-700 hover:text-gray-900">About</Link>
+              <Link href="/owner-vault" className="text-gray-700 hover:text-gray-900">Dashboard</Link>
+              <Link href="/executor-portal" className="text-gray-700 hover:text-gray-900">Executor Portal</Link>
+              <Link href="/auth/signup" className="text-gray-700 hover:text-gray-900">Owner Onboarding</Link>
+              <Link href="/admin-panel" className="text-gray-700 hover:text-gray-900">Admin Panel</Link>
+              <Link href="/executor-access" className="text-blue-600 font-medium">Executor Access</Link>
+              <Link href="/" className="text-gray-700 hover:text-gray-900">About</Link>
               <button className="text-gray-700 hover:text-gray-900">Log Out</button>
             </nav>
           </div>
