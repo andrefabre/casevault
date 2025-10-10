@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database for Development
+  postgres-dev:
+    image: postgres:15-alpine
+    container_name: digital-legacy-db-dev
+    environment:
+      POSTGRES_DB: digital_legacy_dev
+      POSTGRES_USER: dev_user
+      POSTGRES_PASSWORD: dev_password
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    restart: unless-stopped
+    networks:
+      - digital-legacy-dev-network
+
+  # Redis for Development
+  redis-dev:
+    image: redis:7-alpine
+    container_name: digital-legacy-redis-dev
+    ports:
+      - "6380:6379"
+    restart: unless-stopped
+    networks:
+      - digital-legacy-dev-network
+
+  # Development Application (optional - you can also run locally)
+  app-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: digital-legacy-app-dev
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://dev_user:dev_password@postgres-dev:5432/digital_legacy_dev
+      - NEXTAUTH_URL=http://localhost:3000
+    env_file:
+      - .env.development
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - ./uploads:/app/uploads
+    ports:
+      - "3001:3000"
+    depends_on:
+      - postgres-dev
+      - redis-dev
+    restart: unless-stopped
+    networks:
+      - digital-legacy-dev-network
+    command: npm run dev
+
+volumes:
+  postgres_dev_data:
+    driver: local
+
+networks:
+  digital-legacy-dev-network:
+    driver: bridge
