@@ -5,13 +5,6 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-// Mock asset data for demo
-const initialAssets = [
-  { id: "1", name: "Bitcoin Wallet", type: "cryptocurrency", instructions: "Recovery phrase in safe deposit box", category: "cryptocurrency" },
-  { id: "2", name: "Gmail Account", type: "email", instructions: "Recovery email: backup@email.com", category: "email" },
-  { id: "3", name: "Dropbox", type: "cloud_storage", instructions: "2FA app on phone", category: "cloud_storage" },
-];
-
 const assetTypes = [
   { value: "cryptocurrency", label: "Cryptocurrency Wallet" },
   { value: "social_media", label: "Social Media Account" },
@@ -25,10 +18,26 @@ const assetTypes = [
 ];
 
 export default function MyAssetsPage() {
+
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [assets, setAssets] = useState(initialAssets);
+  const [assets, setAssets] = useState<any[]>([]);
   const [showDeleteId, setShowDeleteId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch assets from API
+  useEffect(() => {
+    async function fetchAssets() {
+      setLoading(true);
+      const res = await fetch('/api/assets');
+      if (res.ok) {
+        const data = await res.json();
+        setAssets(data);
+      }
+      setLoading(false);
+    }
+    fetchAssets();
+  }, []);
 
   // Metrics: count assets per category
   const metrics = assetTypes.map((type) => ({
@@ -49,8 +58,9 @@ export default function MyAssetsPage() {
     }
   }, [session, status, router]);
 
-  // Delete asset handler (mock)
-  const handleDelete = (id: string) => {
+  // Delete asset handler (mock, local only)
+  const handleDelete = async (id: string) => {
+    // For demo, just remove locally
     setAssets((prev) => prev.filter((a) => a.id !== id));
     setShowDeleteId(null);
   };
