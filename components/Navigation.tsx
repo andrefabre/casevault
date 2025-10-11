@@ -35,6 +35,12 @@ export default function Navigation() {
           </Link>
 
           <div className="flex items-center space-x-4">
+              <Link 
+                href="/how-it-works" 
+                className={`text-sm hover:text-primary-600 ${pathname === '/how-it-works' ? 'text-primary-600 font-medium' : ''}`}
+              >
+                How it works
+              </Link>
             {session ? (
               <>
                 <span className="text-sm text-gray-600">
