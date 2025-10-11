@@ -232,7 +232,7 @@ export default function SignUpPage() {
                 {/* Body */}
                 <div className="absolute top-6 left-1/2 transform -translate-x-1/2 w-8 h-16 bg-gray-700 rounded-t-lg"></div>
                 {/* Arms */}
-                <div className="absolute top-8 left-1/2 transform -translate-x-1/2 -translate-x-4 w-12 h-3 bg-gray-700 rounded-full"></div>
+                  <div className="absolute top-8 left-1/2 transform -translate-x-1/2 w-12 h-3 bg-gray-700 rounded-full"></div>
                 {/* Legs */}
                 <div className="absolute top-22 left-1/2 transform -translate-x-1/2 w-8 h-10 bg-gray-700"></div>
               </div>

@@ -1,26 +1,52 @@
-import { NextResponse } from 'next/server'
+// Edit asset (PUT)
+export async function PUT(req: Request) {
+  const data = await req.json()
+  const { id, assetName, accessInstructions, accountDetails, assetType } = data
+  try {
+    const updated = await prisma.digitalAsset.update({
+      where: { id },
+      data: {
+        asset_name: assetName,
+        encrypted_instructions: accessInstructions,
+        // Add other fields as needed
+      }
+    })
+    return NextResponse.json(updated)
+  } catch (err) {
+    return NextResponse.json({ error: 'Asset not found or update failed' }, { status: 404 })
+  }
+}
 
-let assets: any[] = [
-  { id: '1', name: 'Bitcoin Wallet', type: 'cryptocurrency', instructions: 'Recovery phrase in safe deposit box', category: 'cryptocurrency' },
-  { id: '2', name: 'Gmail Account', type: 'email', instructions: 'Recovery email: backup@email.com', category: 'email' },
-  { id: '3', name: 'Dropbox', type: 'cloud_storage', instructions: '2FA app on phone', category: 'cloud_storage' },
-]
+// Delete asset (DELETE)
+export async function DELETE(req: Request) {
+  const data = await req.json()
+  const { id } = data
+  try {
+    await prisma.digitalAsset.delete({ where: { id } })
+    return NextResponse.json({ success: true })
+  } catch (err) {
+    return NextResponse.json({ error: 'Asset not found or delete failed' }, { status: 404 })
+  }
+}
+
+import { NextResponse } from 'next/server'
+import prisma from './prisma'
 
 export async function GET() {
+  const assets = await prisma.digitalAsset.findMany({})
   return NextResponse.json(assets)
 }
 
 export async function POST(req: Request) {
   const data = await req.json()
-  const newAsset = {
-    id: String(Date.now()),
-    name: data.assetName,
-    type: data.assetType,
-    instructions: data.accessInstructions,
-    category: data.assetType,
-    accountDetails: data.accountDetails,
-    documentFile: data.documentFile || null,
-  }
-  assets.push(newAsset)
+  // TODO: Add encryption for instructions if needed
+  const newAsset = await prisma.digitalAsset.create({
+    data: {
+      asset_name: data.assetName,
+      owner_id: data.ownerId, // Make sure to pass ownerId from frontend
+      encrypted_instructions: data.accessInstructions,
+      // Add other fields as needed
+    }
+  })
   return NextResponse.json(newAsset)
 }

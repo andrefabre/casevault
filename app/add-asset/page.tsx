@@ -51,6 +51,7 @@ export default function AddAssetPage() {
           accessInstructions,
           accountDetails,
           documentFile: documentFile ? documentFile.name : null,
+          ownerId: session?.user?.id || '',
         })
       })
       if (res.ok) {
