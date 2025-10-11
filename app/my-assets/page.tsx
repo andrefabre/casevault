@@ -132,7 +132,7 @@ export default function MyAssetsPage() {
           <div className="lg:col-span-2">
             <div className="flex items-center justify-between mb-6">
               <h1 className="text-2xl font-bold text-gray-900">My Digital Assets</h1>
-              <Link href="/add-asset" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">Add Asset</Link>
+                <Link href="/add-asset" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium" aria-label="Add a new digital asset">Add Asset</Link>
             </div>
             {assets.length === 0 ? (
               <div className="text-center py-8 text-gray-500">
@@ -152,14 +152,15 @@ export default function MyAssetsPage() {
                       <p className="text-sm text-gray-600 mb-2">Instructions: {asset.instructions}</p>
                     </div>
                     <div className="flex items-center justify-end space-x-2 mt-4">
-                      <button
-                        className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded hover:bg-yellow-200 text-sm font-medium"
-                        onClick={() => handleEdit(asset.id)}
-                      >Edit</button>
+                        <button
+                          className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded hover:bg-yellow-200 text-sm font-medium"
+                          onClick={() => handleEdit(asset.id)}
+                          aria-label={`Edit asset ${asset.asset_name}`}
+                        >Edit</button>
                       <button
                         className="px-3 py-1 bg-red-100 text-red-800 rounded hover:bg-red-200 text-sm font-medium"
                         onClick={() => setShowDeleteId(asset.id)}
-                      >Delete</button>
+                        aria-label={`Delete asset ${asset.asset_name}`}>Delete</button>
                     </div>
                     {showDeleteId === asset.id && (
                       <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded">
