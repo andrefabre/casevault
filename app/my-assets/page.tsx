@@ -1,9 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 export default function MyAssetsPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
   const [assetName, setAssetName] = useState('')
   const [assetType, setAssetType] = useState('')
   const [accessInstructions, setAccessInstructions] = useState('')
@@ -11,6 +15,26 @@ export default function MyAssetsPage() {
   const [documentFile, setDocumentFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
+
+  // Check if user has completed onboarding
+  useEffect(() => {
+    if (status === 'loading') return
+    
+    if (!session) {
+      router.push('/auth/signin')
+      return
+    }
+
+    // Check if user has completed onboarding requirements
+    // For now, we'll assume all new users need to complete onboarding
+    // In a real app, this would check user's actual completion status
+    const hasCompletedOnboarding = session.user?.is_paid && session.user?.is_kyc_verified && session.user?.is_mfa_setup
+    
+    if (!hasCompletedOnboarding) {
+      router.push('/owner-vault?locked=assets')
+      return
+    }
+  }, [session, status, router])
 
   const assetTypes = [
     { value: 'cryptocurrency', label: 'Cryptocurrency Wallet' },

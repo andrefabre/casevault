@@ -52,31 +52,32 @@ const handler = NextAuth({
           return null
         }
 
-        // For development - use mock users
-        const user = mockUsers.find(u => u.email === credentials.email)
-
-        if (!user) {
-          return null
+        // For development - check predefined mock users first
+        const mockUser = mockUsers.find(u => u.email === credentials.email)
+        
+        if (mockUser) {
+          // Return predefined mock user
+          return {
+            id: mockUser.id,
+            email: mockUser.email,
+            name: mockUser.name,
+            role: mockUser.role,
+            is_paid: mockUser.is_paid,
+            is_kyc_verified: mockUser.is_kyc_verified,
+            is_mfa_setup: mockUser.is_mfa_setup,
+          }
         }
 
-        // For development - accept any password, in production this would use bcrypt
-        // const isPasswordValid = await bcrypt.compare(
-        //   credentials.password,
-        //   user.password
-        // )
-
-        // if (!isPasswordValid) {
-        //   return null
-        // }
-
+        // For development - accept any other email/password combination
+        // and create a dynamic user with default 'owner' role
         return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
-          is_paid: user.is_paid,
-          is_kyc_verified: user.is_kyc_verified,
-          is_mfa_setup: user.is_mfa_setup,
+          id: Math.random().toString(36).substr(2, 9),
+          email: credentials.email,
+          name: credentials.email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+          role: 'owner', // Default role for new signups
+          is_paid: false,
+          is_kyc_verified: false,
+          is_mfa_setup: false,
         }
       }
     })

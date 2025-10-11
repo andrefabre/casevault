@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
 import Link from 'next/link'
 
 export default function SignUpPage() {
@@ -57,8 +58,20 @@ export default function SignUpPage() {
         return
       }
 
-      // Redirect to sign in page with success message
-      router.push('/auth/signin?message=Account created successfully. Please sign in.')
+      // Auto-signin after successful signup
+      const signInResult = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      })
+
+      if (signInResult?.error) {
+        // If auto-signin fails, redirect to signin page with message
+        router.push('/auth/signin?message=Account created successfully. Please sign in.')
+      } else {
+        // Successful signup and signin - redirect to dashboard
+        router.push('/owner-vault?welcome=true')
+      }
     } catch (error) {
       setError('An error occurred. Please try again.')
       setLoading(false)
@@ -66,11 +79,11 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
-      <div className="absolute top-0 left-0 right-0 z-10 bg-white/95 backdrop-blur-sm border-b border-gray-200">
+      <div className="bg-white border-b border-gray-200">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-center">
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center">
                 <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -79,29 +92,12 @@ export default function SignUpPage() {
               </div>
               <span className="text-xl font-semibold text-gray-900">DigitalLegacyVault</span>
             </div>
-            
-            <nav className="hidden md:flex items-center space-x-6">
-              <Link href="/my-assets" className="text-gray-700 hover:text-gray-900">Asset Registration</Link>
-              <Link href="/executor-portal" className="text-gray-700 hover:text-gray-900">Executor Portal</Link>
-              <div className="relative">
-                <input 
-                  type="text" 
-                  placeholder="Search for a user" 
-                  className="px-4 py-2 border border-gray-300 rounded-lg text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              <Link href="/owner-vault" className="text-gray-700 hover:text-gray-900">Your Legacy</Link>
-              <Link href="/owner-vault" className="text-gray-700 hover:text-gray-900">Secure Vault</Link>
-              <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm">1</span>
-              </div>
-            </nav>
           </div>
         </div>
       </div>
 
       {/* Left Side - Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center px-8 py-16 bg-white">
+      <div className="w-full lg:w-1/2 flex items-center justify-center px-8 py-16 bg-white pb-24">
         <div className="max-w-md w-full space-y-8">
           <div>
             <h1 className="text-4xl font-bold text-gray-900 mb-2">Sign up</h1>
@@ -192,7 +188,7 @@ export default function SignUpPage() {
               disabled={loading}
               className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Creating account...' : 'Sign Up'}
+              {loading ? 'Creating your account...' : 'Create Account & Continue'}
             </button>
 
             <div className="text-center">
@@ -252,7 +248,7 @@ export default function SignUpPage() {
       </div>
 
       {/* Footer */}
-      <div className="absolute bottom-0 left-0 right-0 bg-gray-100 border-t border-gray-200">
+      <div className="bg-gray-100 border-t border-gray-200 mt-8">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
@@ -261,10 +257,10 @@ export default function SignUpPage() {
             </div>
             
             <nav className="flex items-center space-x-6 text-sm">
-              <Link href="#" className="text-gray-700 hover:text-gray-900">Asset Registration</Link>
-              <Link href="#" className="text-gray-700 hover:text-gray-900">Executor Portal</Link>
-              <Link href="#" className="text-gray-700 hover:text-gray-900">Your Legacy</Link>
-              <Link href="#" className="text-gray-700 hover:text-gray-900">Secure Vault</Link>
+              <Link href="/my-assets" className="text-gray-700 hover:text-gray-900">Asset Registration</Link>
+              <Link href="/executor-portal" className="text-gray-700 hover:text-gray-900">Executor Portal</Link>
+              <Link href="/owner-vault" className="text-gray-700 hover:text-gray-900">Your Legacy</Link>
+              <Link href="/owner-vault" className="text-gray-700 hover:text-gray-900">Secure Vault</Link>
             </nav>
           </div>
         </div>

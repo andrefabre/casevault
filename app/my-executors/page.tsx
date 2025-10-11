@@ -1,12 +1,34 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 export default function MyExecutorsPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
   const [fullName, setFullName] = useState('')
   const [secondaryData, setSecondaryData] = useState('')
   const [loading, setLoading] = useState(false)
+
+  // Check if user has completed onboarding
+  useEffect(() => {
+    if (status === 'loading') return
+    
+    if (!session) {
+      router.push('/auth/signin')
+      return
+    }
+
+    // Check if user has completed onboarding requirements
+    const hasCompletedOnboarding = session.user?.is_paid && session.user?.is_kyc_verified && session.user?.is_mfa_setup
+    
+    if (!hasCompletedOnboarding) {
+      router.push('/owner-vault?locked=executors')
+      return
+    }
+  }, [session, status, router])
 
   const handleMFASubmit = async (e: React.FormEvent) => {
     e.preventDefault()

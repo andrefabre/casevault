@@ -12,7 +12,7 @@ param(
 )
 
 # Function to generate secure random string
-function Generate-Secret {
+function New-Secret {
     $bytes = New-Object byte[] 32
     $rng = [System.Security.Cryptography.RNGCryptoServiceProvider]::Create()
     $rng.GetBytes($bytes)
@@ -30,7 +30,7 @@ function Write-ColorOutput {
 }
 
 # Function to setup environment
-function Setup-Environment {
+function Set-Environment {
     param([string]$EnvType)
     
     Write-ColorOutput "Setting up $EnvType environment..." "Blue"
@@ -47,21 +47,21 @@ function Setup-Environment {
     
     # Generate secrets if this is production setup
     if ($EnvType -eq "production") {
-        Setup-ProductionSecrets
+        Set-ProductionSecrets
     }
     
     Write-ColorOutput "✓ $EnvType environment setup complete" "Green"
 }
 
 # Function to setup production secrets
-function Setup-ProductionSecrets {
+function Set-ProductionSecrets {
     Write-ColorOutput "Generating production secrets..." "Yellow"
     
     # Generate secrets
-    $nextAuthSecret = Generate-Secret
-    $encryptionKey = Generate-Secret
-    $jwtSecret = Generate-Secret
-    $backupEncryptionKey = Generate-Secret
+    $nextAuthSecret = New-Secret
+    $encryptionKey = New-Secret
+    $jwtSecret = New-Secret
+    $backupEncryptionKey = New-Secret
     
     # Read and replace content
     $content = Get-Content ".env" -Raw
@@ -78,7 +78,7 @@ function Setup-ProductionSecrets {
 }
 
 # Function to validate environment
-function Validate-Environment {
+function Test-Environment {
     Write-ColorOutput "Validating environment configuration..." "Blue"
     
     if (!(Test-Path ".env")) {
@@ -154,11 +154,11 @@ switch ($Command) {
             Backup-Environment
         }
         
-        Setup-Environment $Environment
-        Validate-Environment
+        Set-Environment $Environment
+        Test-Environment
     }
     "validate" {
-        Validate-Environment
+        Test-Environment
     }
     "backup" {
         Backup-Environment
@@ -169,7 +169,7 @@ switch ($Command) {
             exit 1
         }
         Backup-Environment
-        Setup-ProductionSecrets
+        Set-ProductionSecrets
         Write-ColorOutput "✓ New secrets generated and applied" "Green"
     }
     "help" {
