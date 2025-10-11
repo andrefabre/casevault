@@ -822,12 +822,12 @@ export default function OwnerVaultPage() {
                   <h2 className="text-xl font-semibold text-gray-900">Registered Assets</h2>
                   <p className="text-gray-600">Manage your digital legacy instructions and documents</p>
                 </div>
-                <Link 
-                  href="/my-assets"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
-                >
-                  Add Asset
-                </Link>
+                  <Link 
+                    href="/add-asset"
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
+                  >
+                    Add Asset
+                  </Link>
               </div>
               
               <div className="text-center py-8 text-gray-500">
