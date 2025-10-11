@@ -25,7 +25,7 @@ export default function SetupMFAPage() {
 
     // Check if MFA is already setup
     if ((session.user as any)?.is_mfa_setup) {
-      router.push('/auth/subscription')
+      router.push('/owner-vault')
       return
     }
 
@@ -81,8 +81,8 @@ export default function SetupMFAPage() {
         return
       }
 
-      // MFA setup successful, redirect to subscription
-      router.push('/auth/subscription')
+  // MFA setup successful, redirect to dashboard
+  router.push('/owner-vault')
     } catch (error) {
       setError('Verification failed. Please try again.')
       setLoading(false)

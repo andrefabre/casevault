@@ -34,9 +34,10 @@ export default function OwnerVaultPage() {
   const [showWelcome, setShowWelcome] = useState(isWelcome)
   const [showLockedAlert, setShowLockedAlert] = useState(!!lockedFeature)
   const [showOnboardingModal, setShowOnboardingModal] = useState(isWelcome || !!lockedFeature)
-  const [activeTask, setActiveTask] = useState<string | null>(null)
+  // If first time (isWelcome), force payment task active
+  const [activeTask, setActiveTask] = useState<string | null>(isWelcome ? 'payment' : null)
   
-  // Onboarding completion state (mock data - in real app this would come from user profile)
+  // Onboarding completion state (now from session)
   const [completedTasks, setCompletedTasks] = useState({
     payment: false,
     registration: false,
@@ -44,6 +45,19 @@ export default function OwnerVaultPage() {
     mfa: false,
     kyc: false
   })
+
+  // Update completedTasks from session when available
+  useEffect(() => {
+    if (session) {
+      setCompletedTasks({
+        payment: !!session.user.is_paid,
+        registration: true, // Assume registration is always complete for mock users
+        terms: true,        // Assume terms are always accepted for mock users
+        mfa: !!session.user.is_mfa_setup,
+        kyc: !!session.user.is_kyc_verified
+      })
+    }
+  }, [session])
   
   // Form states
   const [showAddAsset, setShowAddAsset] = useState(false)
@@ -204,10 +218,10 @@ export default function OwnerVaultPage() {
         </div>
       )}
 
-      {/* Onboarding Modal Overlay */}
-      {showOnboardingModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-6xl w-full max-h-[90vh] overflow-hidden">
+  {/* Onboarding Modal Overlay */}
+  {showOnboardingModal && Object.values(completedTasks).filter(Boolean).length < 5 && (
+        <div className="fixed left-0 right-0 top-24 bottom-0 bg-black bg-opacity-50 flex items-start justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-6xl w-full max-h-[80vh] overflow-hidden mt-0">
             {/* Modal Header */}
             <div className="bg-blue-600 text-white p-6 flex items-center justify-between">
               <div>
