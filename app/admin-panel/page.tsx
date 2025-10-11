@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Header from '../../components/Header'
 
 export default function AdminPanelPage() {
   const [selectedTab, setSelectedTab] = useState('overview')
@@ -58,36 +59,9 @@ export default function AdminPanelPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center">
-                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                </svg>
-              </div>
-              <span className="text-xl font-semibold text-gray-900">MyDigitalLegacy Vault</span>
-              <span className="text-sm text-gray-500">by Exgenesis</span>
-            </div>
-            
-            <nav className="hidden md:flex items-center space-x-6">
-              <Link href="/owner-vault" className="text-gray-700 hover:text-gray-900">Dashboard</Link>
-              <Link href="/executor-portal" className="text-gray-700 hover:text-gray-900">Executor Portal</Link>
-              <Link href="/auth/signup" className="text-gray-700 hover:text-gray-900">Owner Onboarding</Link>
-              <Link href="/admin-panel" className="text-blue-600 font-medium">Admin Panel</Link>
-              <Link href="/executor-access" className="text-gray-700 hover:text-gray-900">Executor Access</Link>
-              <Link href="/" className="text-gray-700 hover:text-gray-900">About</Link>
-              <button className="text-gray-700 hover:text-gray-900">Log Out</button>
-            </nav>
-          </div>
-        </div>
-      </div>
-
+      <Header />
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8">
-        
         {/* Page Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Control Panel</h1>
@@ -97,7 +71,6 @@ export default function AdminPanelPage() {
         {/* System Overview */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
           <h2 className="text-xl font-semibold text-gray-900 mb-6">System Overview</h2>
-          
           <div className="grid md:grid-cols-4 gap-6">
             {/* Pending Claims */}
             <div className="text-center p-4 border border-gray-200 rounded-lg">
