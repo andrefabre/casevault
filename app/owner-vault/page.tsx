@@ -6,18 +6,40 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Header from '../../components/Header'
 
-interface DigitalAsset {
-  id: string
-  asset_name: string
-  encrypted_instructions: string
-  created_at: string
+
+// Improved TypeScript interfaces for type safety
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  is_paid?: boolean;
+  is_mfa_setup?: boolean;
+  is_kyc_verified?: boolean;
+  // Add other user fields as needed
 }
 
-interface ExecutorNomination {
-  id: string
-  executor_email: string
-  status: string
-  created_at: string
+export interface Asset {
+  id: string;
+  ownerId: string;
+  name: string;
+  type: string;
+  encrypted: boolean;
+  createdAt: string;
+  // Add other asset fields as needed
+}
+
+export interface DigitalAsset {
+  id: string;
+  asset_name: string;
+  encrypted_instructions: string;
+  created_at: string;
+}
+
+export interface ExecutorNomination {
+  id: string;
+  executor_email: string;
+  status: string;
+  created_at: string;
 }
 
 export default function OwnerVaultPage() {
@@ -28,7 +50,7 @@ export default function OwnerVaultPage() {
   const lockedFeature = searchParams?.get('locked')
   
   // State management
-  const [assets, setAssets] = useState<DigitalAsset[]>([])
+  const [assets, setAssets] = useState<Asset[]>([])
   const [executors, setExecutors] = useState<ExecutorNomination[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -65,7 +87,15 @@ export default function OwnerVaultPage() {
   const [showNominateExecutor, setShowNominateExecutor] = useState(false)
   
   // Registration form state
-  const [registrationForm, setRegistrationForm] = useState({
+  interface RegistrationForm {
+    phone: string;
+    address: string;
+    city: string;
+    country: string;
+    emergencyContact: string;
+    emergencyPhone: string;
+  }
+  const [registrationForm, setRegistrationForm] = useState<RegistrationForm>({
     phone: '',
     address: '',
     city: '',
@@ -107,6 +137,28 @@ export default function OwnerVaultPage() {
         <div className="text-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading your vault...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-32 h-32 mx-auto mb-4 flex items-center justify-center">
+            <svg className="w-16 h-16 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z" />
+            </svg>
+          </div>
+          <h2 className="text-xl font-semibold text-red-700 mb-2">Error Loading Dashboard</h2>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <button
+            className="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700"
+            onClick={() => { setError(''); setLoading(true); loadDashboardData(); }}
+          >
+            Retry
+          </button>
         </div>
       </div>
     )
