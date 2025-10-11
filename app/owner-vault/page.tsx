@@ -8,6 +8,7 @@ import Header from '../../components/Header'
 
 
 // Improved TypeScript interfaces for type safety
+// User and asset interfaces for type safety and maintainability
 export interface User {
   id: string;
   name: string;
@@ -42,14 +43,20 @@ export interface ExecutorNomination {
   created_at: string;
 }
 
+/**
+ * OwnerVaultPage - Main dashboard for asset owners.
+ * Handles onboarding, asset management, executor nomination, and account setup flows.
+ */
 export default function OwnerVaultPage() {
+  // NextAuth session and navigation hooks
   const { data: session, status } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()
+  // Onboarding and feature lock state from query params
   const isWelcome = searchParams?.get('welcome') === 'true'
   const lockedFeature = searchParams?.get('locked')
   
-  // State management
+  // Asset and executor state management
   const [assets, setAssets] = useState<Asset[]>([])
   const [executors, setExecutors] = useState<ExecutorNomination[]>([])
   const [loading, setLoading] = useState(true)
@@ -60,7 +67,7 @@ export default function OwnerVaultPage() {
   // If first time (isWelcome), force payment task active
   const [activeTask, setActiveTask] = useState<string | null>(isWelcome ? 'payment' : null)
   
-  // Onboarding completion state (now from session)
+  // Tracks completion of onboarding tasks (updated from session)
   const [completedTasks, setCompletedTasks] = useState({
     payment: false,
     registration: false,
@@ -69,7 +76,7 @@ export default function OwnerVaultPage() {
     kyc: false
   })
 
-  // Update completedTasks from session when available
+  // Update onboarding completion state when session changes
   useEffect(() => {
     if (session) {
       setCompletedTasks({
@@ -82,11 +89,11 @@ export default function OwnerVaultPage() {
     }
   }, [session])
   
-  // Form states
+  // UI state for showing modals/forms
   const [showAddAsset, setShowAddAsset] = useState(false)
   const [showNominateExecutor, setShowNominateExecutor] = useState(false)
   
-  // Registration form state
+  // Registration form state and type
   interface RegistrationForm {
     phone: string;
     address: string;
@@ -104,6 +111,7 @@ export default function OwnerVaultPage() {
     emergencyPhone: ''
   })
 
+  // Main effect: redirect if not signed in, load dashboard data, show onboarding if needed
   useEffect(() => {
     if (status === 'loading') return
     
@@ -112,18 +120,22 @@ export default function OwnerVaultPage() {
       return
     }
 
-    // Load dashboard data
+    // Load dashboard data (assets, executors, etc.)
     loadDashboardData()
 
-    // Auto-open onboarding modal for new users or if redirected from locked features
+    // Show onboarding modal for new users or locked features
     if (isWelcome || lockedFeature) {
       setShowOnboardingModal(true)
     }
   }, [session, status, isWelcome, lockedFeature])
 
+  /**
+   * Loads dashboard data (assets, executors, etc.) from API/backend.
+   * Handles error state for failed requests.
+   */
   const loadDashboardData = async () => {
     try {
-      // Load assets and executors
+      // TODO: Fetch assets and executors from API
       setLoading(false)
     } catch (error) {
       setError('Failed to load dashboard data')
@@ -131,6 +143,7 @@ export default function OwnerVaultPage() {
     }
   }
 
+  // Show loading spinner while fetching data or session
   if (status === 'loading' || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -142,6 +155,7 @@ export default function OwnerVaultPage() {
     )
   }
 
+  // Show error message and retry button if dashboard fails to load
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -164,6 +178,7 @@ export default function OwnerVaultPage() {
     )
   }
 
+  // Main dashboard UI rendering
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
