@@ -1,0 +1,14 @@
+<phase>: <concise summary>
+
+Why:
+- <reason for change>
+
+What changed:
+- <key edit 1>
+- <key edit 2>
+
+Validation:
+- <command/test and result>
+
+Evidence:
+- <screenshot/doc/path updated>
