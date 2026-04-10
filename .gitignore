@@ -3,7 +3,7 @@ node_modules/
 package-lock.json
 yarn.lock
 
-# Next.js
+# Frontend build artifacts
 .next/
 out/
 
