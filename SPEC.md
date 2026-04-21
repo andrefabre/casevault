@@ -76,6 +76,7 @@ These items are ruled out of scope to keep complexity low.
 8. PostgreSQL or production-grade database
 9. Network monitoring
 10. Full antivirus scanning via ClamAV
+11. Gunicorn production server — Flask built in development server sufficient for Phase 1 proof of concept
 
 ## 5. Success Criteria
 
