@@ -1,171 +1,371 @@
-# TASKS: Master Execution Board (Phase 1 to Phase 5)
+# TASKS: Master Execution Board
 
-## 1. Refactor Workstream (Completed)
+## Document Context
 
-### 1.1 Structure and governance
+This file defines execution and what for the ICT171 Cloud Server Project.
+Read these files in this order:
 
-- [x] Add SPEC.md.
-- [x] Add PLAN.md.
-- [x] Add TASKS.md.
-- [x] Update README.md for 3-primitives operating model.
-- [x] Add Git workflow guidance and commit template.
+1. [SPEC.md](SPEC.md) — intent and why
+2. [PLAN.md](PLAN.md) — architecture and how
+3. `TASKS.md` — execution and what (this file)
 
-### 1.2 Infrastructure work packaging
+Assessment criteria and marking rubric are defined in `instructions.md`.
+This file is not included in the repository.
 
-- [x] Add infrastructure/scripts/1-provision-vm.sh (production-ready).
-- [x] Add infrastructure/scripts/2-harden-server.sh (production-ready).
-- [x] Add infrastructure/scripts/3-deploy-nginx.sh (production-ready).
-- [x] Implement infrastructure/scripts/4-setup-dns-tls.sh.
-- [x] Implement infrastructure/scripts/5-backup-integrity.sh.
-- [x] Add infrastructure/scripts/verify-all.sh.
-- [x] Add infrastructure/configs/nginx.conf baseline config.
+---
 
-### 1.3 Evidence and traceability
+## How to Use This File
 
-- [x] Add docs/evidence/phase-1/00_evidence_manifest.md.
-- [x] Preserve existing Phase 1 docs and screenshots in place.
+- Work through phases in order — do not start a phase until the previous phase gate is complete
+- Each task has acceptance criteria — a task is not done until its criteria is met
+- Capture evidence for every task that produces output
+- Commit after every completed task using the commit template in `.gitmessage.txt`
+- Update task status as you go — `[ ]` not started, `[x]` complete
 
-## 2. Phase 1: Foundation and Proposal Readiness (Completed)
+---
 
-### 2.1 Infrastructure baseline
+## TCO Presentation (Assessment 2)
 
-- [x] Provision Azure resource group, VNet/subnet, NSG, static public IP, and Ubuntu VM.
-- [x] Restrict SSH and open HTTP/HTTPS in NSG.
-- [x] Validate SSH access to VM.
+Due: 10 May 2026. Managed separately from the cloud server project build.
+Estimated 5 hours remaining — references, speech content, rubric verification, final polish.
+See PowerPoint deck in `docs/`.
 
-### 2.2 Host hardening
+---
 
-- [x] Install and validate Nginx, UFW, fail2ban, Git, and runtime packages.
-- [x] Enable UFW and confirm 22/80/443 rules.
-- [x] Disable password authentication and root SSH login.
+## Phase 0: Refactor and Cleanup (Current)
 
-### 2.3 Landing page and compliance content
+### 0.1 Governance documents
 
-- [x] Deploy static site to /var/www/dlv.
-- [x] Configure Nginx site and health endpoint.
-- [x] Publish student number, proposal content, and license rationale sections.
+- [x] Rewrite SPEC.md — all sections complete, declarative language, internally consistent
+- [x] Rewrite PLAN.md — all sections complete, four layer architecture, script model updated
+- [ ] Rewrite TASKS.md — this file, in progress
+- [ ] Update README.md — reflect new repo structure, updated script paths, correct layer descriptions
+- [x] Fix PLAN.md typo — double em dash on TLS certificate line in Section 6 Security Controls
 
-### 2.4 Evidence package
+### 0.2 Repository structure cleanup
 
-- [x] Capture VM/IP, DNS, HTTP reachability, and page content screenshots.
-- [x] Store artifacts in docs/evidence/phase-1/.
-- [ ] Add group discussion evidence artifact if still pending.
+- [x] Delete orphaned Next.js files — `app/globals.css`, `app/layout.tsx`, `app/page.tsx`
+- [x] Delete Next.js config files — `next-env.d.ts`, `next.config.js`, `package.json`, `tsconfig.json`
+- [x] Restructure scripts into layer folders — `scripts/iaas/`, `scripts/server/`, `scripts/operations/`, `scripts/application/`
+- [x] Move `nginx.conf` to `scripts/server/configs/nginx.conf`
+- [x] Move `INFRASTRUCTURE-SETUP.md` to `scripts/INFRASTRUCTURE-SETUP.md`
+- [x] Delete obsolete `infrastructure/docs/ARCHITECTURE.md`
+- [x] Delete obsolete `infrastructure/docs/DEPLOYMENT-GUIDE.md`
+- [x] Move architecture diagram to `docs/architecture/`
+- [x] Fix `index.html` title tag — change from personal portfolio title to DLV project title
+- [x] Remove Bootstrap from licence acknowledgements table in `index.html`
+- [x] Create evidence folder structure for future phases — `docs/evidence/phase-3/`, `docs/evidence/phase-4/`, `docs/evidence/phase-5/`
 
-## 3. Phase 2: Core Application Build (Current Focus)
+### 0.3 Harden Server script split to separate concerns
 
-### 3.1 DNS and TLS completion
+- [ ] Rewrite `2-harden-server.sh` — split into `3-install-packages.sh` and `4-harden-server.sh`
+  - Acceptance criteria: package installation and hardening are separate scripts with separate responsibilities
+- [ ] Update `4-harden-server.sh` — fail loudly if `SSH_CIDR` is not set, remove insecure fallback
+  - Acceptance criteria: script exits with clear error if `SSH_CIDR` is not set
 
-- [ ] Run infrastructure/scripts/4-setup-dns-tls.sh with DOMAIN and ADMIN_EMAIL set.
-- [ ] Capture terminal output for nslookup, certbot, and curl https checks.
-- [ ] Add/update docs/evidence/phase-2/02_https.md with command outputs and screenshots.
-- [ ] Commit and tag phase milestone when HTTPS evidence is complete.
+### 0.4 Security fix
 
-### 3.2 Intake and upload workflow
+- [ ] Fix UFW SSH rule — restrict port 22 to authorised IP only
+  - Current state: port 22 open to all (`Anywhere`)
+  - Fix: `sudo ufw delete allow 22/tcp` then `sudo ufw allow from YOUR_IP/32 to any port 22 proto tcp`
+  - Acceptance criteria: `sudo ufw status verbose` shows port 22 restricted to specific IP
 
-- [ ] Confirm Flask-first app serving model for assessment and keep the UI lightweight.
-- [ ] Implement owner intake form and server-side validation.
-- [ ] Implement secure upload allowlist, file size check, and UUID rename.
-- [ ] Store uploads outside public web root and metadata in DB.
+### 0.5 Phase 0 gate
 
-### 3.3 Admin and executor workflow
+- [ ] All cleanup tasks complete
+- [ ] Harden server script split to harden server and install packages
+- [ ] Security fix applied and verified
+- [ ] README updated
+- [x] Evidence folder structure created for all phases
+- [ ] Commit history shows deliberate progress
 
-- [ ] Implement admin authentication/session flow.
-- [ ] Implement admin review/status update workflow.
-- [ ] Implement executor read-only release simulation.
-- [ ] Add audit events for submission, upload, review, and status changes.
+---
 
-### 3.4 Phase 2 deliverable gate
+## Phase 1: Foundation (Complete)
 
-- [ ] Demonstrate end-to-end owner to admin path.
-- [ ] Demonstrate executor read-only release simulation.
-- [ ] Record evidence set and commit history for this phase.
+### 1.1 Infrastructure baseline
 
-## 4. Phase 3: Automation and Quality Hardening
+- [x] Provision Azure resource group, VNet, subnet, NSG, static public IP, and Ubuntu VM
+- [x] Restrict SSH to authorised IP and open HTTP/HTTPS in NSG
+- [x] Validate SSH access to VM
 
-### 4.1 Backup and integrity automation
+### 1.2 Host hardening
 
-- [ ] Run infrastructure/scripts/5-backup-integrity.sh on VM.
-- [ ] Verify archive, checksum, and report outputs are generated.
-- [ ] Validate checksum verification results and keep report artifacts.
-- [ ] Optionally enable cron schedule and capture installed cron proof.
+- [x] Install packages — Nginx, UFW, fail2ban, Git, Python3 runtime, SQLite
+- [x] Enable UFW with port rules — 22, 80, 443
+- [x] Disable password authentication and root SSH login
+- [x] Enable and start Nginx and fail2ban
 
-### 4.2 Operational reliability
+### 1.3 Landing page and compliance content
 
-- [ ] Add app and web log rotation policy as a separate guided Phase 3 task.
-- [ ] Confirm health endpoint behavior and uptime checks.
-- [ ] Run infrastructure/scripts/verify-all.sh and capture output artifact.
+- [x] Deploy static site to `/var/www/dlv`
+- [x] Configure Nginx site and health endpoint at `/health`
+- [x] Publish student number, proposal content, and licence rationale
 
-### 4.3 Security review pass
+### 1.4 Evidence package
 
-- [ ] Recheck HTTPS-only behavior and redirects.
-- [ ] Recheck upload restrictions and storage boundaries.
-- [ ] Recheck UFW, fail2ban, and SSH settings.
+- [x] Capture VM, IP, DNS, HTTP reachability, and page content screenshots
+- [x] Store artifacts in `docs/evidence/phase-1/`
+- [x] Add group discussion evidence artifact
 
-## 5. Phase 4: TCO and Documentation Production
+---
 
-### 5.1 TCO build
+## Phase 2: DNS, HTTPS and TLS
 
-- [ ] Estimate monthly and annual cost for IaaS option.
-- [ ] Build SaaS and on-prem comparison baseline.
-- [ ] Add non-cost factors: control, flexibility, and security responsibility.
+### 2.1 DNS script setup
 
-### 5.2 Reproducibility documentation
+- [ ] Split `4-setup-dns-tls.sh` into `2-setup-dns.sh` and `6-setup-tls.sh`
+  - Acceptance criteria: DNS verification and TLS configuration are separate scripts in correct layer folders
+  - `2-setup-dns.sh` — `scripts/iaas/`
+  - `6-setup-tls.sh` — `scripts/server/`
 
-- [ ] Update setup and deployment docs with exact command sequence.
-- [ ] Document config files and troubleshooting notes.
-- [ ] Validate that another student can reproduce using repo docs alone.
+### 2.2 DNS verification
 
-### 5.3 TCO milestone
+- [ ] Run `scripts/iaas/2-setup-dns.sh` and confirm domain resolves to Azure static public IP
+  - Acceptance criteria: `nslookup mydigitallegacyvault.com.au` returns `20.5.125.82`
+- [ ] Capture DNS evidence — CLI output and GoDaddy portal screenshot
+  - Evidence: `docs/evidence/phase-2/`
 
-- [ ] Finalize TCO presentation content by due date.
-- [ ] Store final deck and supporting references in docs.
+### 2.3 TLS setup
 
-## 6. Phase 5: Final Packaging and Submission Readiness
+- [ ] Run `scripts/server/6-setup-tls.sh` with `DOMAIN` and `ADMIN_EMAIL` set
+  - Acceptance criteria: Certbot issues certificate, Nginx serves HTTPS, HTTP redirects to HTTPS
+- [ ] Verify HTTPS in browser — Edge, Chrome, Firefox
+  - Acceptance criteria: padlock visible, no certificate warnings
+- [ ] Verify HTTPS from CLI — `curl -I https://mydigitallegacyvault.com.au` returns `200`
+- [ ] Capture TLS evidence — CLI output, browser screenshots, certificate details
+  - Evidence: `docs/evidence/phase-2/02_https.md`
 
-### 6.1 Evidence finalization
+### 2.4 Backup script setup
 
-- [ ] Capture final screenshots for intake/upload/admin/DNS/HTTPS/script outputs.
-- [ ] Confirm evidence is indexed and linked in docs/evidence.
-- [ ] Confirm commit history shows iterative progress over multiple weeks.
+- [ ] Rewrite `5-backup-integrity.sh` as `7-backup-integrity.sh` in `scripts/operations/`
+  - Acceptance criteria: script correctly targets all backup paths defined in PLAN.md
+- [ ] Run `scripts/operations/7-backup-integrity.sh` on VM
+  - Acceptance criteria: archive, checksum, and report files generated in `/opt/dlv_mvp/backups`
+- [ ] Verify checksum validation passes
+  - Acceptance criteria: `sha256sum -c` returns OK for generated archive
+- [ ] Enable cron schedule for daily backup
+  - Acceptance criteria: cron entry installed and confirmed
+- [ ] Capture backup evidence — CLI output showing archive, checksum, and report paths
+  - Evidence: `docs/evidence/phase-2/`
 
-### 6.2 Video and narrative
+### 2.5 Verify script and run order finalisation
 
-- [ ] Create video run sheet covering infra, DNS/TLS, app flow, and scripts.
-- [ ] Record explainer video with command and browser proof.
+- [ ] Update `scripts/operations/8-verify-server.sh` — add package verification, backup report check, full output formatted for assessor review
+  - Acceptance criteria: single script run produces formatted output confirming all rubric criteria are met
+- [ ] Update `scripts/INFRASTRUCTURE-SETUP.md` — reflect new eight-script run order after restructure
+  - Acceptance criteria: document lists all eight scripts in correct run order with prerequisites for each
+- [ ] Confirm final script run order:
+  - `1-provision-vm.sh`
+  - `2-setup-dns.sh`
+  - `3-install-packages.sh`
+  - `4-harden-server.sh`
+  - `5-deploy-nginx.sh`
+  - `6-setup-tls.sh`
+  - `7-backup-integrity.sh`
+  - `8-verify-server.sh`
+
+### 2.6 Phase 2 gate
+
+- [ ] DNS resolves correctly
+- [ ] HTTPS valid and reachable without certificate warnings
+- [ ] Backup script produces timestamped verifiable report
+- [ ] Evidence captured and committed
+- [ ] Commit and tag phase milestone
+
+---
+
+## Phase 3: Flask Application Build
+
+### 3.1 Server preparation
+
+- [ ] Create application directory structure on VM
+  - `sudo mkdir -p /opt/dlv_mvp/uploads`
+  - `sudo mkdir -p /opt/dlv_mvp/app`
+  - `sudo mkdir -p /opt/dlv_mvp/backups`
+  - Acceptance criteria: all directories exist on VM with correct permissions
+
+### 3.2 Project setup
+
+- [ ] Create Flask app structure in `server/`
+  - `server/app.py` — main application file
+  - `server/requirements.txt` — pip dependencies
+  - `server/templates/` — HTML templates
+  - `server/static/` — static assets
+- [ ] Create virtual environment at `/opt/dlv_mvp/.venv`
+- [ ] Install dependencies — `pip install -r server/requirements.txt`
+  - Dependencies: `flask`, `python-magic`
+- [ ] Verify Flask app runs locally — `python server/app.py`
+  - Acceptance criteria: `http://127.0.0.1:5000` returns 200
+
+### 3.3 Database setup
+
+- [ ] Create SQLite database at `/opt/dlv_mvp/app/dlv_mvp.db`
+- [ ] Define schema — users, asset records, audit log tables
+- [ ] Verify database connection from Flask app
+  - Acceptance criteria: app starts without database errors
+
+### 3.4 Owner workflow
+
+- [ ] Implement account creation — registration form and server-side validation
+  - Acceptance criteria: owner can create account, credentials stored securely
+- [ ] Implement asset record creation — form, validation, database write
+  - Acceptance criteria: owner can create, read, update, delete own records
+- [ ] Implement document upload with security controls
+  - Allowlist file types verified by python-magic
+  - File size limit enforced server side
+  - UUID rename on storage
+  - Store uploads outside web root
+  - Acceptance criteria: PDF and DOCX accepted, all other types rejected, 
+    files not accessible via direct URL, stored with UUID filename
+- [ ] Implement executor nomination — owner selects executor from registered users
+  - Acceptance criteria: executor nomination stored, vault becomes active
+
+### 3.5 Admin workflow
+
+- [ ] Implement admin authentication and session management
+  - Acceptance criteria: admin login works, session persists, logout clears session
+- [ ] Implement admin review page — view submissions and uploaded document metadata
+  - Acceptance criteria: admin can view all owner submissions
+- [ ] Implement manual probate verification and release approval
+  - Acceptance criteria: admin can approve executor release, status updates in database
+- [ ] Implement audit logging — submission, upload, login, and status change events
+  - Acceptance criteria: audit events written to log for all critical actions listed in SPEC.md
+
+### 3.6 Executor workflow
+
+- [ ] Implement executor account creation
+  - Acceptance criteria: executor can register and log in
+- [ ] Implement executor read-only access — view owner asset records after admin approval
+  - Acceptance criteria: executor can only read, cannot create, update, or delete
+- [ ] Implement access condition — executor cannot view records until admin approves
+  - Acceptance criteria: executor sees restricted message before approval, records after
+
+### 3.7 Testing
+
+- [ ] Write test plan in `docs/testing/` — document what is being tested and expected outcomes for each workflow
+- [ ] Test owner workflow end to end — account creation, asset record, upload, executor nomination
+- [ ] Test admin workflow end to end — login, review, probate verification, release approval
+- [ ] Test executor workflow end to end — login, access denied before approval, access granted after
+- [ ] Test upload security controls — verify rejected file types, size limits, and UUID rename
+- [ ] Capture test evidence — screenshots for each test scenario
+  - Evidence: `docs/evidence/phase-3/`
+
+### 3.8 Phase 3 gate
+
+- [ ] End-to-end workflow demonstrated — owner account creation to simulated executor release
+- [ ] All three roles verified against access levels in SPEC.md
+- [ ] Upload security controls verified
+- [ ] Test plan complete and evidence captured
+- [ ] Commit history shows iterative development
+
+---
+
+## Phase 4: Operations and Security Review
+
+### 4.1 Verification script
+
+- [ ] Run `scripts/operations/8-verify-server.sh` and capture full output
+  - Acceptance criteria: all checks pass, output formatted for assessor review
+- [ ] Store output as evidence artifact
+  - Evidence: `docs/evidence/phase-4/verify-server-output.txt`
+
+### 4.2 Security review pass
+
+- [ ] Verify HTTPS-only behaviour — HTTP redirects to HTTPS
+- [ ] Verify upload restrictions and storage boundaries
+- [ ] Verify UFW, fail2ban, and SSH settings match Security Controls in PLAN.md
+- [ ] Verify NSG rules match documented configuration
+
+### 4.3 Phase 4 gate
+
+- [ ] Verify script output confirms all rubric criteria
+- [ ] Security review complete with no outstanding issues
+- [ ] Evidence captured and committed
+
+---
+
+## Phase 5: Reproducibility Test
+
+### 5.1 Documentation preparation
+
+- [ ] Document all config files, environment variables, and troubleshooting notes
+- [ ] Confirm documentation covers all eight scripts in run order with prerequisites
+
+### 5.2 Full rebuild test
+
+- [ ] Delete all Azure infrastructure — resource group and all contained resources
+- [ ] Follow `scripts/INFRASTRUCTURE-SETUP.md` from scratch using only repo documentation
+- [ ] Run each script in order, document any gaps, errors, or missing steps
+- [ ] Fix documentation where the rebuild reveals issues
+- [ ] Rebuild again until it completes without documentation gaps
+  - Acceptance criteria: full rebuild completed using only repo documentation with no undocumented steps
+
+### 5.3 Phase 5 gate
+
+- [ ] Full rebuild completed successfully using documentation only
+- [ ] All documentation gaps identified and fixed
+- [ ] Evidence captured — rebuild CLI output and screenshots
+  - Evidence: `docs/evidence/phase-5/`
+- [ ] Commit documentation fixes
+
+---
+
+## Phase 6: Final Packaging and Submission
+
+### 6.1 Evidence finalisation
+
+- [ ] Capture final screenshots — intake, upload, admin, DNS, HTTPS, script outputs
+- [ ] Confirm evidence indexed and linked in `docs/evidence/`
+- [ ] Confirm commit history shows iterative progress across multiple weeks
+  - Acceptance criteria: commits spread across 3+ weeks with meaningful messages
+
+### 6.2 Video explainer
+
+- [ ] Write video run sheet — VM launch, web server setup, DNS linking, app workflow, script output
+- [ ] Record explainer video
+  - Acceptance criteria: video covers all required rubric elements within time limit
 
 ### 6.3 Final verification gate
 
-- [ ] Validate public accessibility and all links.
-- [ ] Validate docs completeness against acceptance criteria.
-- [ ] Freeze release tag for final submission package.
+- [ ] Run `8-verify-server.sh` — confirm all checks pass
+- [ ] Validate public accessibility — domain resolves, HTTPS works, app accessible
+- [ ] Validate documentation completeness against SPEC.md success criteria
+- [ ] Freeze release tag for final submission
 
-## 7. Practical Learning Track (3 Primitives)
+---
 
-### 7.1 CLI
+## Branch Sequence
 
-- [ ] Run each script manually before changing it.
-- [ ] Explain each command block and expected output in commit notes.
-- [ ] Record one lesson learned per script execution.
+Work in this order, one branch per task cluster:
 
-### 7.2 Git
+1. `refactor/tasks-cleanup` — this rewrite
+2. `fix/security-ufw-ssh` — UFW SSH rule fix
+3. `refactor/split-harden-server-script` — split harden server script
+4. `phase2/dns-tls` — DNS script split, DNS verification, TLS setup, backup script
+5. `phase3/flask-setup` — server preparation, project structure, database
+6. `phase3/owner-workflow` — account, records, uploads
+7. `phase3/admin-executor-workflow` — admin and executor paths
+8. `phase3/testing` — test plan and test evidence
+9. `phase4/operations` — verification script and security review
+10. `phase5/reproducibility` — documentation and full rebuild test
+11. `phase6/final-package` — evidence, video, submission
 
-- [ ] Use one branch per task cluster.
-- [ ] Use commit template for intent + validation + evidence.
-- [ ] Tag milestones at phase boundaries.
+---
 
-### 7.3 Markdown
+## Hour Budget Tracking
 
-- [ ] Keep SPEC.md, PLAN.md, and TASKS.md synchronized after major changes.
-- [ ] Update acceptance criteria when scope changes.
-- [ ] Keep evidence index up to date when artifacts are added.
+Total budget: 110 hours
+Buffer: 30 hours reserved for overruns
 
-## 8. Suggested Branch Sequence
-
-1. refactor/spec-plan-tasks
-2. refactor/infrastructure-scripts
-3. phase2/dns-tls
-4. phase2/intake-upload
-5. phase2/admin-executor
-6. phase3/backup-hardening
-7. phase4/tco-docs
-8. phase5/final-package
+| Phase | Estimated Hours | Actual Hours | Status |
+| --- | --- | --- | --- |
+| Phase 0 — Refactor and Cleanup | 8 | | In Progress |
+| Phase 2 — DNS, HTTPS and TLS | 5 | | Not Started |
+| Phase 3 — Flask Application | 32 | | Not Started |
+| Phase 4 — Operations and Security | 4 | | Not Started |
+| Phase 5 — Reproducibility Test | 8 | | Not Started |
+| Phase 6 — Final Packaging | 5 | | Not Started |
+| **Total Estimated** | **62** | | |
+| **Buffer** | **30** | | |
+| **Total Budget** | **92** | | |

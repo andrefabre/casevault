@@ -175,7 +175,7 @@ This document defines the technical architecture for the ICT171 Cloud Server pro
 4. SSH hardening:
    - Deny password authentication `PasswordAuthentication no`
    - Deny root login `PermitRootLogin no`
-5. TLS certificate via Certbot —— auto-renewal managed by certbot.timer
+5. TLS certificate via Certbot — auto-renewal managed by certbot.timer
 6. Upload security controls
    - Allowlist file types verified by python-magic
    - File size limit enforced server side
