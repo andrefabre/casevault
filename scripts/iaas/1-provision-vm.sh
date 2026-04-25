@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Provision Azure base infrastructure for ICT171 DLV MVP.
+# Provision Azure base infrastructure for ICT171 Cloud Project
 
 require_cmd() {
     if ! command -v "$1" >/dev/null 2>&1; then

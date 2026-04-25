@@ -3,6 +3,9 @@ set -euo pipefail
 
 # Run this script on the Ubuntu VM after SSH login.
 
+Fix UFW SSH rule to restrict to authorised IP only
+Update 4-harden-server.sh to fail loudly if SSH_CIDR is not set rather than falling back to open rule
+
 SSH_CIDR="${SSH_CIDR:-}"
 
 if [[ "${EUID}" -eq 0 ]]; then

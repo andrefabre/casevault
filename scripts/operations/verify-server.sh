@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+dpkg -l ufw fail2ban nginx git python3 python3-venv python3-pip sqlite3 certbot python3-certbot-nginx | grep "^ii" | awk '{print $2, $3}'
+
 DOMAIN="${DOMAIN:-mydigitallegacyvault.com.au}"
 
 echo "== Service checks =="
