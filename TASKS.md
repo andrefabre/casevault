@@ -38,8 +38,8 @@ See PowerPoint deck in `docs/`.
 
 - [x] Rewrite SPEC.md — all sections complete, declarative language, internally consistent
 - [x] Rewrite PLAN.md — all sections complete, four layer architecture, script model updated
-- [ ] Rewrite TASKS.md — this file, in progress
-- [ ] Update README.md — reflect new repo structure, updated script paths, correct layer descriptions
+- [x] Rewrite TASKS.md — this file, complete
+- [x] Update README.md — reflect new repo structure, updated script paths, correct layer descriptions
 - [x] Fix PLAN.md typo — double em dash on TLS certificate line in Section 6 Security Controls
 
 ### 0.2 Repository structure cleanup
@@ -75,7 +75,7 @@ See PowerPoint deck in `docs/`.
 - [ ] All cleanup tasks complete
 - [ ] Harden server script split to harden server and install packages
 - [ ] Security fix applied and verified
-- [ ] README updated
+- [x] README updated
 - [x] Evidence folder structure created for all phases
 - [ ] Commit history shows deliberate progress
 

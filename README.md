@@ -1,76 +1,113 @@
 ﻿# ICT171 Cloud Server Project + Digital Legacy Vault MVP
 
-This repository is the single delivery repo for:
-
-1. ICT171 Cloud Server Project infrastructure and evidence
-2. Digital Legacy Vault Phase 1 MVP application layer
-
-The refactor applies the 3 primitives workflow:
-
-1. CLI: executable infrastructure scripts in `infrastructure/scripts/`
-2. Git: traceable delivery strategy in `docs/GIT-WORKFLOW.md`
-3. Markdown: spec-driven files `SPEC.md`, `PLAN.md`, and `TASKS.md`
-
-The app layer is Flask-first behind Nginx. Static public content remains in `public/` for the landing page and assessment evidence, but the protected workflows are intended to live in `server/`.
+The project must build reproducible cloud-hosted infrastructure, a secure web server, manual and automated scripting, and deploy the Digital Legacy Vault Phase 1 MVP application. The application must be non-custodial, compliance and security-first because it stores personal data and releases it to a nominated executor.
 
 ## Start Here
 
+The project is structured across four distinct layers:
+
+1. **IaaS layer** — Azure VM, networking, NSG, public IP, DNS
+2. **Server layer** — Ubuntu OS, Nginx web server, HTTPS, TLS
+3. **Application layer** — Digital Legacy Vault Phase 1 MVP, Flask backend with frontend UI
+4. **Documentation and scripting layer** — overarching project documentation, layer specific documentation, evidence artefacts, automated and manually executed scripts for each layer
+
 Read these files in order:
 
-1. `SPEC.md` (what and why)
-2. `PLAN.md` (architecture and technical decisions)
-3. `TASKS.md` (implementation sequence)
+1. [SPEC.md](SPEC.md) — intent and why
+2. [PLAN.md](PLAN.md) — architecture and technical decisions
+3. [TASKS.md](TASKS.md) — implementation sequence
 
 ## Current Delivery Status
 
-1. Phase 1 baseline complete:
-   - Azure VM provisioned
-   - Hardened Ubuntu + Nginx
-   - Landing page deployed
-   - DNS record resolves to VM
-   - Evidence captured in `docs/evidence/phase-1/`
-2. Refactor complete for Phase 2 kickoff:
-   - Spec-driven files added
-   - Infrastructure scripts added
-   - Git workflow defined
+1. Phase 1: Foundation [Complete]
+   - [x] Infrastructure Baseline — Azure VM, SSH to Authorised IP only and Open HTTP/HTTPS in NSG, SSH access to VM
+   - [x] Host Hardening — Package install, UFW port rules, Enable Nginx and fail2ban, Disable SSH root login
+   - [x] Landing page and compliance content — Deploy static stie to `/var/www/dlv`
+   - [x] Evidence package — `/docs/evidence/phase-1`
+2. Phase 2: DNS, HTTPS and TLS
+   - [ ] DNS script setup — develop `scripts/iaas/2-setup-dns.sh`
+   - [ ] DNS verification — confirm domain resolves to Azure static public IP `scripts/iaas/2-setup-dns.sh`
+   - [ ] TLS setup — Certbot issues certificate, Nginx serves HTTPS, HTTP redirects to HTTPS `scripts/server/6-setup-tls.sh`
+   - [ ] Backup script setup — develoep `7-backup-integrity.sh`
+   - [ ] Backup files —  archive, checksum, and report files generated in `/opt/dlv_mvp/backups`
+   - [ ] `8-verify-server.sh` script to validate IaaS and Server config and deployment
+   - [ ] `INFRASTRUCTURE.md` — Document script run order with prerequisites
+   - [ ] Evidence package — CLI output, browser screenshots, certificate details `/docs/evidence/phase-2`
+3. Phase 3: Flask Application Build
+   - [ ] Server preparation
+   - [ ] Project setup
+   - [ ] Database setup
+   - [ ] Owner workflow
+   - [ ] Admin workflow
+   - [ ] Executor workflow
+   - [ ] Testing
+   - [ ] Evidence package — `/docs/evidence/phase-3`
+4. Phase 4: Operations and Security Review
+   - [ ] Verification script
+   - [ ] Security review pass
+   - [ ] Evidence package — `/docs/evidence/phase-4`
+5. Phase 5: Reproducibility Test
+   - [ ] Documentation preparation
+   - [ ] Full rebuild test
+   - [ ] Evidence package — `/docs/evidence/phase-5`
+6. Phase 6: Final Packaging and Submission
+   - [ ] Evidence finalisation
+   - [ ] Video explainer
+   - [ ] Final verification gate
+   - [ ] Evidence package — `/docs/evidence/phase-6`
 
 ## Repository Structure
 
 ```text
-.
-|-- SPEC.md
-|-- PLAN.md
-|-- TASKS.md
-|-- infrastructure/
-|   |-- configs/
-|   |-- docs/
-|   `-- scripts/
-|-- docs/
-|   |-- architecture/
-|   |-- evidence/
-|   `-- GIT-WORKFLOW.md
-|-- app/
-|-- public/
-|-- scripts/
-`-- server/
+├── docs/
+│   ├── architecture/   - architecture diagrams and visual references for the project
+│   ├── evidence/       - evidence screenshots for each build phase
+│   │   ├── phase-1/
+│   │   ├── phase-2/
+│   └── testing/        - test plans for DLV App
+├── public/             - static web assets served by Nginx, the landing page and its dependencies
+│   ├── assets/
+│   │   └── images/     - image files used by the landing page
+│   ├── css/            - stylesheet for the landing page
+│   └── js/             - JavaScript for the landing page
+├── scripts/
+│   ├── application/    - Flask app deployment scripts
+│   ├── iaas/           - Azure provisioning scripts
+│   ├── operations/     - DNS and backup scripts
+│   ├── server/         - server hardening and Nginx deployment scripts
+│   │   └── configs/    - server config files
+│   └── INFRASTRUCTURE-SETUP.md
+├── server/      - Flask application source code
+├── SPEC.md      - intent and why for the ICT171 Cloud Server Project
+├── PLAN.md      - defines the how for the ICT171 Cloud Server Project
+├── TASKS.md     - tasks to implement the ICT171 Cloud Server Project
+├── README.md   - project overview, repository structure, and quick start guide
+├── LICENSE
+└── .gitmessage.txt - template for commit messages
 ```
 
-## Infrastructure Scripts
+## Scripts
 
-Production-ready scripts:
+Application scripts:
 
-1. `infrastructure/scripts/1-provision-vm.sh`
-2. `infrastructure/scripts/2-harden-server.sh`
-3. `infrastructure/scripts/3-deploy-nginx.sh`
+1. TBC
 
-Phase 2 guided stubs:
+IaaS scripts:
 
-1. `infrastructure/scripts/4-setup-dns-tls.sh`
-2. `infrastructure/scripts/5-backup-integrity.sh`
+1. `/scripts/1-provision-vm.sh`
+2. `/scripts/2-setup-dns.sh`
 
-Optional orchestration:
+Operations scripts:
 
-1. `infrastructure/scripts/verify-all.sh`
+1. `/scripts/7-backup-integrity.sh`
+2. `/scripts/8-verify-server.sh`
+
+Server scripts:
+
+1. `/scripts/3-install-packages.sh`
+2. `/scripts/4-harden-server.sh`
+3. `/scripts/5-deploy-nginx.sh`
+4. `/scripts/6-setup-tls.sh`
 
 ## Local App Development
 
@@ -85,9 +122,12 @@ Open `http://127.0.0.1:5000` once the Flask app exists.
 
 ## Evidence
 
-1. Phase 1 evidence artifacts: `docs/evidence/phase-1/`
-2. Evidence manifest: `docs/evidence/phase-1/00_evidence_manifest.md`
-3. Phase 2 evidence placeholders: `docs/evidence/phase-2/`
+1. Phase 1: `docs/evidence/phase-1/`
+2. Phase 2: `docs/evidence/phase-2/`
+3. Phase 3: `docs/evidence/phase-3/`
+4. Phase 4: `docs/evidence/phase-4/`
+5. Phase 5: `docs/evidence/phase-5/`
+6. Phase 6: `docs/evidence/phase-6/`
 
 ## License
 
