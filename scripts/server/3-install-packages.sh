@@ -10,7 +10,7 @@ if [[ "${EUID}" -eq 0 ]]; then
 fi
 
 sudo apt update && sudo apt upgrade -y
-sudo apt install -y ufw fail2ban nginx git python3 python3-venv python3-pip sqlite3 certbot python3-certbot-nginx
+sudo apt install -y ufw fail2ban nginx python3 python3-venv python3-pip sqlite3 certbot python3-certbot-nginx
 
 echo ""
 echo "Package install complete."
@@ -18,7 +18,6 @@ echo "Installed Packages:"
 echo "  ufw"
 echo "  fail2ban"
 echo "  nginx"
-echo "  git"
 echo "  python3"
 echo "  python3-venv"
 echo "  python3-pip"

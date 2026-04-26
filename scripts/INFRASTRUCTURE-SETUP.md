@@ -1,29 +1,58 @@
 # Infrastructure Setup Guide
 
-This guide consolidates the script-driven flow and points to existing detailed evidence docs.
+This guide consolidates the script-driven flow
 
 ## Run Order
 
-1. Make scripts executable with `chmod +x infrastructure/scripts/*.sh`.
-2. Run `infrastructure/scripts/1-provision-vm.sh` from your local machine with Azure CLI.
+1. Make scripts executable with `chmod +x docs/scripts/*.sh`.
+2. Run `docs/scripts/iaas/1-provision-vm.sh` from your local machine with Azure CLI.
    - Optional: set `SUBSCRIPTION_ID=<your-subscription-id>` before running.
-3. SSH to VM and run `infrastructure/scripts/2-harden-server.sh`.
+3. SSH to VM ssh azureuser@yourIP
+4. Sudo apt install git to install git
+
+```bash
+ssh azureuser@20.5.125.82
+sudo apt update && sudo apt install -y git
+```
+
+5. Clone Repository
+
+```bash
+cd ~
+sudo git clone https://github.com/andrefabre/digitalLegacyVaultPhase1MVP.git
+cd YOUR_REPO
+```
+
+Run scripts in order
+
+```bash
+bash scripts/server/2-dns-setup.sh
+bash scripts/server/3-install-packages.sh
+SSH_CIDR=<replacewithyourIP>/32 bash scripts/server/4-harden-server.sh
+bash scripts/server/5-deploy-nginx.sh
+bash scripts/server/6-setup-tls.sh
+bash scripts/operations/7-backup-integrity.sh
+bash scripts/operations/8-verify-server.sh
+```
+
+
+ssh azureuser@20.5.125.82
+Move to azureuser /home directory
+Clone repo once
+git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
+cd YOUR_REPO
+
+Run scripts from repo
+bash scripts/server/3-install-packages.sh
+SSH_CIDR=203.0.113.45/32 bash scripts/server/4-harden-server.sh
+1. Run `/docs/scripts/iass/2-setup-dns.sh` to setup DNS
+2. Install required packages, run `/docs/scripts/server/3-install-packages.sh`
+3. Harden server run `docs/scripts/server/4-harden-server.sh`.
    - Optional: set `SSH_CIDR=<your-public-ip>/32` to restrict SSH at UFW level.
-4. On VM, from repo root, run `infrastructure/scripts/3-deploy-nginx.sh`.
-5. Complete and run `4-setup-dns-tls.sh` and `5-backup-integrity.sh` during Phase 2.
-
-## Existing Evidence References
-
-1. Provisioning evidence:
-   - `docs/evidence/phase-1/01_provision_secure_azure_base_infrastructure/01_provision_secure_azure_base_infrastructure.md`
-2. Hardening evidence:
-   - `docs/evidence/phase-1/02_harden_ubuntu_server/02_harden_ubuntu_server.md`
-3. Nginx landing page evidence:
-   - `docs/evidence/phase-1/03_publish_initial-nginx_landing_page/03_publish_initial_nginx_landing_page.md`
-4. Proposal compliance evidence:
-   - `docs/evidence/phase-1/04_proposal_compliance_content.md`
-5. Evidence checklist:
-   - `docs/evidence/phase-1/05_evidence_capture_phase1.md`
+4. Deploy Nginx server `docs/scripts/server/5-deploy-nginx.sh`
+5. Setup TLS `docs/scripts/server/6-setup-tls.sh`
+6.  Backup Integrity Complete `docs/scripts/operations/7-backup-integrity.sh`
+7.  Verify Server Setup `docs/scripts/operations/8-verify-server.sh`
 
 ## Validation Checklist
 

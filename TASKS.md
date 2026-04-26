@@ -58,26 +58,26 @@ See PowerPoint deck in `docs/`.
 
 ### 0.3 Harden Server script split to separate concerns
 
-- [ ] Rewrite `2-harden-server.sh` — split into `3-install-packages.sh` and `4-harden-server.sh`
+- [x] Rewrite `2-harden-server.sh` — split into `3-install-packages.sh` and `4-harden-server.sh`
   - Acceptance criteria: package installation and hardening are separate scripts with separate responsibilities
-- [ ] Update `4-harden-server.sh` — fail loudly if `SSH_CIDR` is not set, remove insecure fallback
+- [x] Update `4-harden-server.sh` — fail loudly if `SSH_CIDR` is not set, remove insecure fallback
   - Acceptance criteria: script exits with clear error if `SSH_CIDR` is not set
 
 ### 0.4 Security fix
 
-- [ ] Fix UFW SSH rule — restrict port 22 to authorised IP only
+- [x] Fix UFW SSH rule — restrict port 22 to authorised IP only
   - Current state: port 22 open to all (`Anywhere`)
   - Fix: `sudo ufw delete allow 22/tcp` then `sudo ufw allow from YOUR_IP/32 to any port 22 proto tcp`
   - Acceptance criteria: `sudo ufw status verbose` shows port 22 restricted to specific IP
 
 ### 0.5 Phase 0 gate
 
-- [ ] All cleanup tasks complete
-- [ ] Harden server script split to harden server and install packages
-- [ ] Security fix applied and verified
+- [x] All cleanup tasks complete
+- [x] Harden server script split to harden server and install packages
+- [x] Security fix applied and verified
 - [x] README updated
 - [x] Evidence folder structure created for all phases
-- [ ] Commit history shows deliberate progress
+- [x] Commit history shows deliberate progress
 
 ---
 

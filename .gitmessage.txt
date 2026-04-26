@@ -1,14 +1,36 @@
-<phase>: <concise summary>
+refactor: Update README.md
 
 Why:
-- <reason for change>
+- README file updated to reflect new repo structure, updated script paths, correct layer descriptions
+
+
 
 What changed:
-- <key edit 1>
-- <key edit 2>
+```markdown
+The following sections were updated
+- [x] Start Here
+- [x] Current Delivery Status
+- [x] Repository Structure
+- [x] Scripts
+- [x] Evidence
 
+```
 Validation:
-- <command/test and result>
+- Manual verification of README.md file and internal links.
+- Confirm directory structure in README.md file matches PLAN.md and current repo structure
 
 Evidence:
-- <screenshot/doc/path updated>
+
+-azureuser@vm-dlv-mvp-prod:/home/digitalLegacyVaultPhase1MVP$ sudo ufw status verbose
+Status: active
+Logging: on (low)
+Default: deny (incoming), allow (outgoing), disabled (routed)
+New profiles: skip
+
+To                         Action      From
+--                         ------      ----
+80/tcp                     ALLOW IN    Anywhere
+443/tcp                    ALLOW IN    Anywhere
+22/tcp                     ALLOW IN    43.227.111.82
+80/tcp (v6)                ALLOW IN    Anywhere (v6)
+443/tcp (v6)               ALLOW IN    Anywhere (v6)
